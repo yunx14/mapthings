@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "Gotham";
+  src:
+  url("/fonts/Gotham/Gotham-Book.ttf") format("truetype"),
+  url("/fonts/Gotham/Gotham-Book.otf") format("opentype");
+}
+
+$gotham: "Gotham", Arial, sans-serif;
+
+@font-face {
+  font-family: "GothamMedium";
+  src:
+  url("/fonts/Gotham/Gotham-Medium.ttf") format("truetype"),
+  url("/fonts/Gotham/Gotham-Medium.otf") format("opentype");
+}
+
+$gothammedium: "GothamMedium", "Gotham", Arial, sans-serif;

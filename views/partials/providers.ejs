@@ -1,0 +1,24 @@
+<h2>Providers</h2>
+<ul class='provider-list'>
+    <% providers.forEach(function(provider) { %>
+        <li class='provider-facility'>
+          <span class='provider-name'><%= provider.name.first %> <%= provider.name.middle %> <%= provider.name.last %> <%= provider.name.suffix %></span>
+          <p class='provider-address'>
+            <span class='street-address'><%= provider.addresses[0].address %></span>
+            <span class='city'><%= provider.addresses[0].city %>,&nbsp;</span><span class='state'> <%= provider.addresses[0].state %>&nbsp;</span><span class='zip'><%= provider.addresses[0].zip %></span>
+          </p>
+          <p class='provider-contact'><a href="#" class="tel"><%= provider.addresses[0].phone %></a></p>
+          <ul class='provider-speciality'>
+            <% provider.speciality.forEach(function(speciality) { %>
+              <li class='speciality'><%= speciality %></li>
+            <% }); %>
+          </ul>
+          <ul class='provider-language'>
+            <% provider.languages.forEach(function(language) { %>
+              <li class='language'><%= language %></li>
+            <% }); %>
+          </ul>
+        </li>
+    <% }); %>
+</ul>
+<script src="/javascripts/providers-list.js"></script>

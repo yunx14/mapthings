@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Details for <%= providerID %></title>
+    <link rel='stylesheet' href='/styles/main.css' />
+    <script src="/javascripts/map-cluster.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwM4PtsUrx03bFU9UhqI44KwdXXqbiGJQ&libraries=places"></script>
+    <script src="/javascripts/jquery.min.js"></script>
+  </head>
+  <body>
+
+    <div role="main" class='container'>
+
+      <header class="wrapper wrapper-header">
+
+        <div class="wrapper-inner wrapper-header-inner">
+
+          <a class="homepage logo" href="/" title="Home">
+            Home
+            <span class="home-icon"></span>
+          </a>
+
+          <div class="search-input">
+            <label for="string-search" class='sr-only'>search...</label>
+            <input type="text" name="string-search" class="string-search-input" id='string-search' placeholder="search..." />
+            <button role="button" class="search-icon search-button string-button"><img src="../images/ic_search.png" srcset="../images/ic_search.svg" alt="Search" /></button>
+          </div>
+
+        </div>
+
+      </header>
+
+      <div id="detail-content" class="app-content provider-detail">
+
+        <div class="provider-facility"></div>
+
+        <div class='provider-facility'>
+          <div class="provider-distance">
+            <span class="distance"></span>
+          </div>
+          <div class="provider-name">
+            <span class='first'></span>
+            <span class='middle'></span>
+            <span class='last'></span>
+            <ul class='provider-specialty'></ul>
+          </div>
+
+          <p class='provider-address'>
+            <span class='street-address'></span>
+            <span class='city'></span>
+            <span class='state'></span>
+            <span class='zip'></span>
+          </p>
+
+          <p class='provider-number'>
+            <a href="#" class="tel"></a>
+          </p>
+
+          <div id='map-location' class='map-location' style="width:100%;height:140px"></div>
+
+          <p class="accepting"></p>
+
+          <h4 style='margin-top:20px;'>Languages</h4>
+          <ul class='provider-language'></ul>
+
+          <h4 style='margin-top:20px;'>Provider Network</h4>
+          <ul class='provider-networks'></ul>
+
+          <h4 style='margin-top:20px;'>Practice Hours</h4>
+          <p class='hours-container'>Mon-Fri: <span class='hours'></span></p>
+
+          <p class='npi' style="display:none;"></p>
+
+          <p class='gender' style='display:none;'></p>
+
+          <h4 style='margin-top:20px;'>Procedures</h4>
+          <p>Login to view your costs or <a href="https://www.deltadental.com/Public/CostEstController.ccl" target="_blank">visit our estimator</a> to view general costs.</p>
+
+        </div>
+
+      </div>
+
+      <footer class='page-footer'>
+
+      </footer>
+
+    </div>
+
+
+
+    <script src="/json/sf.js"></script>
+    <script src="/json/1000.js"></script>
+    <script src="/javascripts/smoothscroll.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/helper-functions.js"></script>
+    <script src="/javascripts/location.js"></script>
+    <script>
+      getProviderDetails(<%- JSON.stringify(providerID) %>);
+    </script>
+  </body>
+</html>

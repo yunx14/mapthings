@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Maps</title>
+    <link rel='stylesheet' href='/styles/main.css' />
+    <script src="/javascripts/map-cluster.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwM4PtsUrx03bFU9UhqI44KwdXXqbiGJQ&libraries=places"></script>
+    <script src="/javascripts/jquery.min.js"></script>
+
+    <style>
+      .hidden {
+        display: none;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <div role="main" class='container'>
+
+
+
+      <header>
+        <div class="wrapper clearfix" style="clear: both; overflow: hidden; padding: 0.25rem 0.25rem 0.25rem 0; background-color: #563d82;">
+          <div class="" style="width: 3.25rem; height: 2.75rem; float: left; text-align: center;">
+            <span style="display: inline-block; height: 100%; vertical-align: middle;"></span>
+            <img src="images/ic_home_white.png" srcset="images/ic_home_white.svg" alt="logo" class="logo" style="vertical-align: middle;">
+          </div>
+
+          <div class="" style="float: left; width: calc(100% - 3.25rem);">
+            <form class='' >
+              <label for="string-search" class='sr-only'>Search...</label>
+              <input id='string-search' tabindex="1" type="text" name="" value="" autocomplete="off" placeholder="Search..." style="width: calc(100% - 42px);">
+              <button tabindex="2" role="button" style='width:2.625rem;height:2.6875rem;float:right;margin-top:0;background-color:#D5CFE0;'><img src="images/ic_search.png" srcset="images/ic_search.svg" alt="Search" style="vertical-align:middle;" /></button>
+              <label for="location-search" class="sr-only">Near</label>
+              <input id='location-search' tabindex="1" type="text" name="" value="" placeholder="Near" style='margin-top:.25rem;'>
+            </form>
+          </div>
+
+        </div>
+      </header>
+
+      <!-- <header class="wrapper wrapper-header">
+
+        <div class="wrapper-inner wrapper-header-inner">
+
+          <a class="homepage logo" href="/" title="Home">
+            Home
+            <span class="home-icon"></span>
+          </a>
+
+          <div class="search-input toggle-control">
+            <label for="string-search" class='sr-only'>Search...</label>
+            <input type="text" name="string-search" class="string-search-input" id='string-search' placeholder="Search..." />
+            <button role="button" class="search-icon search-button string-button"><img src="images/ic_search.png" srcset="images/ic_search.svg" alt="Search" /></button>
+          </div>
+
+          <div class='toggle-element' style="display: none;">
+            <a class="homepage logo invisible" href="/" title="Home">
+              Home
+              <span class="home-icon"></span>
+            </a>
+
+            <div class="location-input">
+              <label for="location-search" class="sr-only">Near</label>
+              <input type="text" name="location-search" class="location-search" id="location-search" placeholder="Near" />
+            </div>
+          </div>
+
+        </div>
+
+      </header> -->
+
+    <div id="map"></div>
+      <div id="info-content">
+        <ul class='place-info'>
+          <li class='place-facility'>
+            <span class='place-name'></span>
+            <p class='place-address'>
+              <span class='place-street'></span>
+              <span class='place-city'></span><span class='place-state'></span><span class='place-zip'></span>
+            </p>
+            <p class='place-contact'><a href="#" class="place-tel"></a></p>
+          </li>
+        </ul>
+      </div>
+
+      <nav class="results-nav wrapper" id="results-nav" style="display:none">
+        <div class="wrapper-inner">
+          <div class="view-results search-adjustable">
+            <p class="results-amount">
+              <span class="results-qty"><!-- this will be populated by function writeResultsQty --></span>
+              <span class="filter-qty"><!-- this will be populated by function allFilterQty --></span>
+            </p>
+
+            <p class="search-refine">
+              <a href="#" class="toggle-search">Refine search <span class="chevron-right">&rsaquo;</span></a>
+            </p>
+          </div>
+
+          <div class="view-search search-adjustable unfocused">
+            <p class="back">
+              <a href="#" class="toggle-search"><span class="chevron-left">&lsaquo;</span> Back to search results</a>
+            </p>
+          </div>
+        </div>
+
+      </nav>
+
+      <section class='directory-list wrapper search-adjustable' id="directory-list">
+
+        <div class="start-search" id="start-message">
+          <div class='wrapper-inner'>
+            <h3>Find a Dentist</h3>
+            <p><a href="#">Log in</a> to make sure you're viewing the right dentists for your insurance.</p>
+            <p>Search for dentists by name, specialty, or language above.</p>
+          </div>
+        </div>
+
+        <div class="error-message" id="no-results" style="display:none">
+          <div class="wrapper-inner">
+            <h3>No results</h3>
+            <p>Didn't find what you were looking for?</p>
+
+
+              <ul>You could try:
+                <li>Changing the dentist name</li>
+                <li>Changing the location/network</li>
+                <li>Removing some of the optional filters</li>
+              </ul>
+
+            <p>
+              Still no luck? Email us at help@deltadental.com, or call us at 867-5309
+            </p>
+          </div>
+        </div>
+
+        <img id="loader" style="display:none" src="/images/loader.gif" alt="loading" width="24" style="display:block; margin:2rem auto;"/>
+
+        <ul class='provider-list' id='provider-list'>
+
+          <li class='provider-facility' id='provider-facility-template' data-result-index>
+            <div class="provider-distance">
+              <span class="distance">0.3 mi</span>
+            </div>
+            <div class='provider-name'>
+                <span class='first'>Dentist</span>
+                <span class='middle'>Full</span>
+                <span class='last'>Name</span>
+
+                <ul class='provider-specialty'></ul>
+            </div>
+
+            <div class="provider-contact">
+              <p class='provider-address'>
+                <span class='street-address'>2520 Woodland Rd</span>
+                <span class='city'>Mobile,</span>
+                <span class='state'>AL</span>
+                <span class='zip'>36693</span>
+              </p>
+
+              <p class='provider-number'><a href="#" class="tel">251.661.7788</a></p>
+            </div>
+
+            <a href='' class='provider-link'>View Profile <span class="chevron-right">&rsaquo;</span></a>
+          </li>
+
+        </ul>
+
+        <button class="primary-button hidden" id="load-more">Load More Dentists</button>
+        <ul class="pagination">
+
+        </ul>
+      </section>
+
+      <aside class="advanced-search wrapper search-adjustable unfocused" id="advanced-search">
+        <div class="wrapper-inner">
+
+            <fieldset class="checkboxes filter-category">
+              <legend class="sr-only">Network</legend>
+              <label for="in-network">
+                <input type="checkbox" id="in-network" class="filtering" name="in-network" checked> Show only in-network dentists<span class="filters-amount hidden" data-amount="1"></span>
+              </label>
+              <p><a href="#">Log in</a> to view dentists in your plan.</p>
+            </fieldset>
+
+            <fieldset class="radios" id='sortBy'>
+              <legend>Sort</legend>
+              <div>
+                <input id="sort-ratings" type="radio" name="sorting" value="ratings">
+                <label for="sort-ratings">Ratings</label>
+              </div>
+              <!-- <div>
+                <input id="sort-cost" type="radio" name="sorting" value="sort-cost">
+                <label for="sort-cost">Cost</label>
+              </div> -->
+              <div>
+                <input id="sort-distance" type="radio" name="sorting" value="distance" checked="checked">
+                <label for="sort-distance">Distance</label>
+              </div>
+            </fieldset>
+
+            <fieldset class="checkboxes collapsible filter-category">
+              <legend class="collapsible-trigger">Specialties<span class="filters-amount" data-amount="0"></span><span class="chevron">&rsaquo;</span></legend>
+                <div id="specialty-filter">
+                <!--  These will be populated by function populateSpecialities -->
+              </div>
+            </fieldset>
+
+            <fieldset class="checkboxes collapsible filter-category">
+              <legend class="collapsible-trigger">Languages<span class="filters-amount" data-amount="0"></span><span class="chevron">&rsaquo;</span></legend>
+                <div id="language-filter">
+                  <!-- These will be populated by function populateLanguages -->
+              </div>
+            </fieldset>
+
+            <fieldset class="checkboxes collapsible filter-category">
+              <legend class="collapsible-trigger">Gender<span class="filters-amount" data-amount="0"></span><span class="chevron">&rsaquo;</span></legend>
+                <div id="gender-filter">
+                <!-- These will be populated by function populateGenders -->
+              </div>
+            </fieldset>
+
+        </div>
+      </aside>
+
+
+
+
+      <!-- <h3 id='create-map'>Map Goes Here</h3>
+      <label for="distance">Distance</label>
+      <select id="distance">
+        <option value='100'>100 miles</option>
+        <option value='500'>500 miles</option>
+        <option value="1000">1000 miles</option>
+        <option value="3000">3000 miles</option>
+      </select>
+      <label for="location">Location</label>
+      <input id="location" type="text" />
+
+      <div id="map-header" class='map-header'>
+        <button>Search this area</button>
+      </div> -->
+
+      <footer class='page-footer'>
+
+      </footer>
+
+    </div>
+
+    <script src="/json/1000.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/smart-search.js"></script>
+    <script src="/javascripts/providers-list.js"></script>
+    <script src="/javascripts/helper-functions.js"></script>
+    <script src="/javascripts/pagination.js"></script>
+    <script src="/javascripts/oop-map.js"></script>
+    <script src="/javascripts/map-helpers.js"></script>
+    <script src="/javascripts/search.js"></script>
+
+  </body>
+</html>
