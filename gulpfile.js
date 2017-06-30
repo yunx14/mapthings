@@ -1,7 +1,13 @@
 var gulp = require('gulp');
-var ghpages = require('gh-pages');
 var path = require('path');
+var sass = require('gulp-sass');
 
-gulp.task('ghpages', function(){
-  ghpages.publish(path.join(__dirname, 'public'));
+gulp.task('sass', function () {
+  return gulp.src('./public/sass/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./public/styles'));
+});
+
+gulp.task('sass:watch', function () {
+  gulp.watch('./public/sass/**/*.scss', ['sass']);
 });
